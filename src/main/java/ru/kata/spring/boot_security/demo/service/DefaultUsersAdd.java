@@ -28,7 +28,7 @@ public class DefaultUsersAdd {
     @Bean
     @Transactional
     public void defaultUsers () {
-        List<Role> rolesAdmin = new ArrayList<>();
+        Set<Role> rolesAdmin = new HashSet<>();
         Role adminRole = new Role("ROLE_ADMIN");
         User adminUser = new User("admin", passwordEncoder.encode("admin"));
 
@@ -36,7 +36,7 @@ public class DefaultUsersAdd {
         adminUser.setRoles(rolesAdmin);
         userRepository.save(adminUser);
 
-        List<Role> rolesUser = new ArrayList<>();
+        Set<Role> rolesUser = new HashSet<>();
         Role userRole = new Role("ROLE_USER");
         User userUser = new User("user", passwordEncoder.encode("user"));
 

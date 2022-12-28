@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserDetailsService {
 
     @Transactional
     public void saveUser(User user) {
-        List<Role> roles = new ArrayList<>();
+        Set<Role> roles = new HashSet<>();
         if(user.getRoles()==null) {
             Role newRole = new Role("ROLE_NONE");
             roles.add(newRole);

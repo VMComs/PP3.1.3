@@ -57,12 +57,15 @@ public class UserServiceImpl implements UserDetailsService {
 
 
     @Transactional
-    public void updateUser(int id, User updatedUser) {
+    public void updateUser(int id, User updatedUser, String listRoles[]) {
         User foundUser = userRepository.findById(id).get();
         updatedUser.setId(id);
-        updatedUser.setRoles(foundUser.getRoles());
+        Set<Role> set = new HashSet<>();
+        for (String s : listRoles) {
+                set.add(getRoleByName(s));
+                updatedUser.setRoles(set);
+        }
         updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-
         userRepository.save(updatedUser);
     }
 

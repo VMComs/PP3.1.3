@@ -73,14 +73,15 @@ public class UserController {
     }
 
     @PatchMapping("/admin/{id}")
-    public String update(@ModelAttribute("userUpdate") @Valid User user, BindingResult bindingResult, @PathVariable("id") int id) {
+    public String update(@ModelAttribute("userUpdate") @Valid User user, @RequestParam("listRoles[]") String[] listRoles,
+                            BindingResult bindingResult, @PathVariable("id") int id) {
         System.out.println(user);
 
         if(bindingResult.hasErrors()) {
             return "edit";
         }
 
-        userServiceImpl.updateUser(id, user);
+        userServiceImpl.updateUser(id, user, listRoles);
         return "redirect:/admin";
     }
 

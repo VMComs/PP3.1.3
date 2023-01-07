@@ -7,10 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Controller
@@ -51,11 +54,12 @@ public class UserController {
     }
 
     @PostMapping("/admin")
-    public String create(@ModelAttribute("newUser") @Valid User user, BindingResult bindingResult) {
+    public String create(@ModelAttribute("newUser") @Valid User user, @RequestParam("listRoles[]") String[] listRoles, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return "create";
         }
-        userServiceImpl.saveUser(user);
+
+        userServiceImpl.saveUser(user, listRoles);
         return "redirect:/admin";
     }
 

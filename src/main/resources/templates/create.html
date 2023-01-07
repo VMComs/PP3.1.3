@@ -15,7 +15,16 @@
     <label for="password">Enter password: </label>
     <input type="password" th:field="*{password}" id="password"/>
     <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
-    <br/><br>
+    <br/>
+    <br>
+    <label for="password"><b>Role</b></label>
+    <div>
+        <select multiple name="listRoles[]" class="form-control" size="2" required="required">
+            <option value="ROLE_ADMIN">ADMIN</option>
+            <option value="ROLE_USER">USER</option>
+        </select>
+    </div>
+    </br>
 
     <input type="submit" value="Create!"/>
 </form>

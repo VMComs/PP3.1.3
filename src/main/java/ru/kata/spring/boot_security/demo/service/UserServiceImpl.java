@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.*;
@@ -21,12 +22,15 @@ public class UserServiceImpl implements UserDetailsService {
 
 
     private final UserRepository userRepository;
+
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -37,21 +41,17 @@ public class UserServiceImpl implements UserDetailsService {
 
     public User findUser(int id) {
         Optional<User> foundUser = userRepository.findById(id);
-//        foundUser.get().getRoles().forEach(System.out::println);
         return foundUser.orElse(null);
     }
 
     @Transactional
-    public void saveUser(User user) {
-        Set<Role> roles = new HashSet<>();
-        if(user.getRoles()==null) {
-            Role newRole = new Role("ROLE_NONE");
-            roles.add(newRole);
+    public void saveUser(User user, String[] listRoles) {
+        Set<Role> set = new HashSet<>();
+        for (String s : listRoles) {
+            set.add(getRoleByName(s));
         }
-
-        user.setRoles(roles);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
+        user.setRoles(set);
         userRepository.save(user);
     }
 
@@ -83,6 +83,22 @@ public class UserServiceImpl implements UserDetailsService {
 
     public User getUser(String username) {
         return userRepository.findUserByName(username).get();
+    }
+
+
+
+//    @Autowired
+//    public RoleServiceImpl(RoleRepository roleRepository) {
+//        this.roleRepository = roleRepository;
+//    }
+
+
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
+    }
+
+    public Role getRoleByName(String roleName) {
+        return roleRepository.findByRole(roleName);
     }
 
 

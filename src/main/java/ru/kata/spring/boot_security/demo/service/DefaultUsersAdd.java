@@ -44,6 +44,13 @@ public class DefaultUsersAdd {
         userUser.setRoles(rolesUser);
         userRepository.save(userUser);
 
+        Set<Role> rolesCombo = new HashSet<>();
+        User userCombo = new User("combo", passwordEncoder.encode("combo"));
+        rolesCombo.add(userRole);
+        rolesCombo.add(adminRole);
+        userCombo.setRoles(rolesCombo);
+        userRepository.save(userCombo);
+
     }
 
 }

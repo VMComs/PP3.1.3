@@ -13,6 +13,7 @@ import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -54,7 +55,7 @@ public class UserController {
     }
 
     @PostMapping("/admin")
-    public String create(@ModelAttribute("newUser") @Valid User user, @RequestParam("listRoles[]") String[] listRoles, BindingResult bindingResult) {
+    public String create(@ModelAttribute("newUser") @Valid User user, @RequestParam("listRoles") List<String> listRoles, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return "create";
         }
@@ -73,14 +74,15 @@ public class UserController {
     }
 
     @PatchMapping("/admin/{id}")
-    public String update(@ModelAttribute("userUpdate") @Valid User user, BindingResult bindingResult, @PathVariable("id") int id) {
+    public String update(@ModelAttribute("userUpdate") @Valid User user, @RequestParam("listRoles") List<String> listRoles,
+                         BindingResult bindingResult, @PathVariable("id") int id) {
         System.out.println(user);
 
         if(bindingResult.hasErrors()) {
             return "edit";
         }
 
-        userServiceImpl.updateUser(id, user);
+        userServiceImpl.updateUser(id, user, listRoles);
         return "redirect:/admin";
     }
 

@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserDetailsService {
     }
 
     @Transactional
-    public void saveUser(User user, String[] listRoles) {
+    public void saveUser(User user, List<String> listRoles) {
         Set<Role> set = new HashSet<>();
         for (String s : listRoles) {
             set.add(getRoleByName(s));
@@ -57,12 +57,15 @@ public class UserServiceImpl implements UserDetailsService {
 
 
     @Transactional
-    public void updateUser(int id, User updatedUser) {
+    public void updateUser(int id, User updatedUser, List<String> listRoles) {
         User foundUser = userRepository.findById(id).get();
         updatedUser.setId(id);
-        updatedUser.setRoles(foundUser.getRoles());
+        Set<Role> set = new HashSet<>();
+        for (String s : listRoles) {
+            set.add(getRoleByName(s));
+            updatedUser.setRoles(set);
+        }
         updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-
         userRepository.save(updatedUser);
     }
 

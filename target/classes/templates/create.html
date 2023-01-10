@@ -9,17 +9,17 @@
 
 <form th:method="POST" th:action="@{/admin}" th:object="${newUser}">
     <label for="name">Enter name: </label>
-    <input type="text" th:field="*{name}" id="name"/>
+    <input type="text" th:field="*{name}" id="name" required="required"/>
     <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
     <br/><br>
     <label for="password">Enter password: </label>
-    <input type="password" th:field="*{password}" id="password"/>
+    <input type="password" th:field="*{password}" id="password" required="required"/>
     <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
     <br/>
     <br>
     <label for="password"><b>Role</b></label>
     <div>
-        <select multiple name="listRoles[]" class="form-control" size="2" required="required">
+        <select multiple name="listRoles" class="form-control" size="2" required="required">
             <option value="ROLE_ADMIN">ADMIN</option>
             <option value="ROLE_USER">USER</option>
         </select>
